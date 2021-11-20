@@ -1,0 +1,57 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  spacing: 0px;
+}
+
+#board {
+  border: 10px solid black;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+}
+
+.answer {
+  align-items: center;
+  border: 5px solid black;
+  color: #ffcc22;
+  cursor: pointer;
+  display: flex;
+  font-family: sans-serif;
+  font-size: 50px;
+  justify-content: center;
+  text-shadow: 5px 5px #000000;
+}
+
+.category {
+  align-items: center;
+  border: 10px solid black;
+  color: #ffffff;
+  display: flex;
+  font-family: sans-serif;
+  font-size: 25px;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.dollar:before {
+  content: '$';
+  font-size: 80%;
+}
+
+.tile {
+  background: #000099;
+  display: flex;
+  flex-grow: 1;
+}
+
+.tile:hover {
+  background: #0000dd;
+}
