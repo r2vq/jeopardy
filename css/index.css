@@ -115,7 +115,6 @@ input[type="button"] {
 
 .answer {
   align-items: center;
-  border: 5px solid black;
   color: #ffcc22;
   cursor: pointer;
   font-family: sans-serif;
@@ -126,7 +125,6 @@ input[type="button"] {
 
 .answered {
   align-items: center;
-  border: 5px solid black;
   color: #ffcc22;
   cursor: pointer;
   font-family: sans-serif;
@@ -137,7 +135,6 @@ input[type="button"] {
 
 .category {
   align-items: center;
-  border: 10px solid black;
   color: #ffffff;
   font-family: sans-serif;
   font-size: 3.5vmin;
@@ -239,6 +236,7 @@ input[type="button"] {
 
 .tile {
   background: #000099;
+  border: 5px solid black;
   display: flex;
   flex: 1;
   text-align: center;
