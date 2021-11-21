@@ -241,7 +241,7 @@ input[type="button"] {
   text-align: center;
 }
 
-.tile:hover {
+.answer:hover, .answered:hover {
   background: #0000ee;
 }
 
