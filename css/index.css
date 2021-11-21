@@ -85,6 +85,20 @@ input[type="button"] {
   width: 100vw;
 }
 
+#question {
+  align-items: center;
+  background: #000099;
+  border: 10px solid black;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-size: 50px;
+  height: 100vh;
+  justify-content: center;
+  padding: 40px;
+  width: 100vw;
+}
+
 #splash {
   align-items: center;
   background: #ffffff;

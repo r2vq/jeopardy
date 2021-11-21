@@ -1,8 +1,9 @@
 let board = document.getElementById("board");
 let clue = document.getElementById("clue");
-let dailyDouble = document.getElementById("dailyDouble");
-let splash = document.getElementById("splash");
 let createForm = document.getElementById("createForm");
+let dailyDouble = document.getElementById("dailyDouble");
+let question = document.getElementById("question");
+let splash = document.getElementById("splash");
 
 splash.addEventListener("change", e => {
   let file = e.target.files[0];
@@ -52,6 +53,7 @@ function onAnswerClick(answer, answerItem) {
     answer.addEventListener("click", hideClue);
 
     clue.innerHTML = answerItem.answer;
+    question.innerHTML = answerItem.question;
 
     hide(board);
 
@@ -87,8 +89,13 @@ function onRemoveAnimation(element, animation) {
 }
 
 clue.addEventListener("click", () => {
-  show(board);
+  show(question);
   hide(clue);
+});
+
+question.addEventListener("click", () => {
+  show(board);
+  hide(question);
 });
 
 clue.addEventListener("webkitTransitionEnd", onRemoveAnimation(clue, "grow"));
