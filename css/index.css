@@ -118,10 +118,8 @@ input[type="button"] {
   border: 5px solid black;
   color: #ffcc22;
   cursor: pointer;
-  display: flex;
-  flex: 1;
   font-family: sans-serif;
-  font-size: 50px;
+  font-size: 5vw;
   justify-content: center;
   text-shadow: 5px 5px #000000;
 }
@@ -131,8 +129,6 @@ input[type="button"] {
   border: 5px solid black;
   color: #ffcc22;
   cursor: pointer;
-  display: flex;
-  flex: 1;
   font-family: sans-serif;
   font-size: 0px;
   justify-content: center;
@@ -143,10 +139,8 @@ input[type="button"] {
   align-items: center;
   border: 10px solid black;
   color: #ffffff;
-  display: flex;
-  flex: 1;
   font-family: sans-serif;
-  font-size: 20px;
+  font-size: 2.5vw;
   justify-content: center;
   overflow: hidden;
 }
