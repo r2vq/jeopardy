@@ -7,12 +7,12 @@
   }
 }
 
-@keyframes rotate {
+@keyframes rotateAndGrow {
   from {
-    transform: rotateY(0deg);
+    transform: scale(0.1) rotateX(0deg);
   }
   to {
-    transform: rotateY(360deg);
+    transform: scale(1) rotateX(360deg);
   }
 }
 
@@ -146,7 +146,7 @@ input[type="button"] {
   display: flex;
   flex: 1;
   font-family: sans-serif;
-  font-size: 25px;
+  font-size: 20px;
   justify-content: center;
 }
 
@@ -203,7 +203,7 @@ input[type="button"] {
 }
 
 .rotate {
-  animation: rotate 2s;
+  animation: rotateAndGrow 2s;
 }
 
 .createGame {
