@@ -36,8 +36,10 @@ function onAnswerClick(answer, answerItem) {
 
     if (answerItem.isDailyDouble) {
       dailyDouble.classList.remove("hidden");
+      dailyDouble.classList.add("rotate");
     } else {
       clue.classList.remove("hidden");
+      clue.classList.add("grow");
     }
     answer.classList.add("answered");
     answer.classList.remove("answer");
@@ -53,10 +55,21 @@ function onAnswerClick(answer, answerItem) {
   return showClue;
 };
 
+function removeAnimation(element, animation) {
+  return function(event) {
+    element.classList.remove(animation);
+  }
+}
+
 clue.addEventListener("click", () => {
   board.classList.remove("hidden");
   clue.classList.add("hidden");
 });
+
+clue.addEventListener("webkitTransitionEnd", removeAnimation(clue, "grow"));
+clue.addEventListener("transitionEnd", removeAnimation(clue, "grow"));
+dailyDouble.addEventListener("webkitTransitionEnd", removeAnimation(dailyDouble, "rotate"));
+dailyDouble.addEventListener("transitionEnd", removeAnimation(dailyDouble, "rotate"));
 
 dailyDouble.addEventListener("click", () => {
   dailyDouble.classList.add("hidden");

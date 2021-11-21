@@ -1,3 +1,21 @@
+@keyframes grow {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
 body {
   background: #000000;
   margin: 0px;
@@ -24,6 +42,7 @@ body {
   font-size: 50px;
   height: 100vh;
   justify-content: center;
+  padding: 40px;
   width: 100vw;
 }
 
@@ -92,8 +111,16 @@ body {
   font-size: 80%;
 }
 
+.grow {
+  animation: grow 500ms;
+}
+
 .hidden {
   display: none !important;
+}
+
+.rotate {
+  animation: rotate 2s;
 }
 
 .tile {
