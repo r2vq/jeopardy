@@ -51,7 +51,7 @@ input[type="button"] {
   box-sizing: border-box;
   color: #ffffff;
   display: flex;
-  font-size: 50px;
+  font-size: 10vmin;
   height: 100vh;
   justify-content: center;
   padding: 40px;
@@ -120,7 +120,7 @@ input[type="button"] {
   font-family: sans-serif;
   font-size: 5vw;
   justify-content: center;
-  text-shadow: 5px 5px #000000;
+  text-shadow: 0.75vmin 0.75vmin #000000;
 }
 
 .answered {
