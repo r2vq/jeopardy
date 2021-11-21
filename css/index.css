@@ -140,7 +140,7 @@ input[type="button"] {
   border: 10px solid black;
   color: #ffffff;
   font-family: sans-serif;
-  font-size: 2.5vw;
+  font-size: 3.5vmin;
   justify-content: center;
   overflow: hidden;
 }
@@ -189,8 +189,16 @@ input[type="button"] {
 
 .header {
   font-family: monospace;
-  font-size: 30px;
+  font-size: 8vmin;
   padding: 16px;
+  text-align: center;
+}
+
+.subheader {
+  font-family: monospace;
+  font-size: 2.5vmin;
+  padding: 16px;
+  text-align: center;
 }
 
 .hidden {
