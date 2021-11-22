@@ -4,6 +4,54 @@ let createForm = document.getElementById("createForm");
 let dailyDouble = document.getElementById("dailyDouble");
 let question = document.getElementById("question");
 let splash = document.getElementById("splash");
+let form = document.getElementById("create");
+
+createFormQuestions();
+
+function createFormQuestions() {
+  let formQuestions = document.createElement("div");
+  addClass(formQuestions, "formQuestions");
+  form.appendChild(formQuestions);
+
+  for (let i = 0; i < 6; i++) {
+    let cat = "cat" + i;
+
+    let catDiv = document.createElement("div");
+    addClass(catDiv, "formSection");
+    formQuestions.appendChild(catDiv);
+
+    createInput(cat, "text", null, "Category " + (i + 1), "categoryLabel", catDiv);
+    for (let j = 0; j < 5; j++) {
+      createInput(cat + "clue" + j, "text", "clueInput", "Clue " + (j + 1), "clueLabel", catDiv);
+      createInput(cat + "question" + j, "text", "questionInput", "Expected Response", "questionLabel", catDiv);
+      createInput(cat + "price" + j, "text", "priceInput", "Price", "priceLabel", catDiv);
+      createInput(cat + "daily" + j, "checkbox", "dailyInput", "Daily Double?", "dailyDoubleLabel", catDiv);
+    }
+  }
+
+  let gameNameSection = document.createElement("div");
+  addClass(gameNameSection, "gameNameSection");
+  form.appendChild(gameNameSection);
+  createInput("gameName", "text", "gameNameInput", "File Name", "gameNameLabel", gameNameSection);
+
+  createInput("download", "submit", null, "Download Game", "download", form);
+  setDownloadClickListener();
+}
+
+function createInput(inputId, inputType, inputClass, labelText, labelClass, parent) {
+  let inputLabel = document.createElement("label");
+  addAttribute(inputLabel, "for", inputId);
+  addClass(inputLabel, labelClass);
+  inputLabel.innerHTML = labelText;
+  parent.appendChild(inputLabel);
+  let input = document.createElement("input");
+  input.id = inputId;
+  addAttribute(input, "type", inputType);
+  if (inputClass) {
+    addClass(input, inputClass);
+  }
+  parent.appendChild(input);
+}
 
 splash.addEventListener("change", e => {
   let file = e.target.files[0];
@@ -20,228 +68,38 @@ document.getElementById("createGame").addEventListener("click", e => {
   show(createForm);
 });
 
-document.getElementById("download").addEventListener("click", e => {
-  e.preventDefault();
-  let name = document.getElementById("gameName").value;
+function setDownloadClickListener() {
+  document.getElementById("download").addEventListener("click", e => {
+    e.preventDefault();
+    let name = document.getElementById("gameName").value;
 
-  let data = [{
-      name: document.getElementById("cat1").value,
-      answers: [
-        {
-          answer: document.getElementById("cat1clue1").value,
-          question: document.getElementById("cat1question1").value,
-          value: document.getElementById("cat1price1").value,
-          isDailyDouble: document.getElementById("cat1daily1").checked
-        },
-        {
-          answer: document.getElementById("cat1clue2").value,
-          question: document.getElementById("cat1question2").value,
-          value: document.getElementById("cat1price2").value,
-          isDailyDouble: document.getElementById("cat1daily2").checked
-        },
-        {
-          answer: document.getElementById("cat1clue3").value,
-          question: document.getElementById("cat1question3").value,
-          value: document.getElementById("cat1price3").value,
-          isDailyDouble: document.getElementById("cat1daily3").checked
-        },
-        {
-          answer: document.getElementById("cat1clue4").value,
-          question: document.getElementById("cat1question4").value,
-          value: document.getElementById("cat1price4").value,
-          isDailyDouble: document.getElementById("cat1daily4").checked
-        },
-        {
-          answer: document.getElementById("cat1clue5").value,
-          question: document.getElementById("cat1question5").value,
-          value: document.getElementById("cat1price5").value,
-          isDailyDouble: document.getElementById("cat1daily5").checked
-        },
-      ]
-    },
-    {
-      name: document.getElementById("cat2").value,
-      answers: [
-        {
-          answer: document.getElementById("cat2clue1").value,
-          question: document.getElementById("cat2question1").value,
-          value: document.getElementById("cat2price1").value,
-          isDailyDouble: document.getElementById("cat2daily1").checked
-        },
-        {
-          answer: document.getElementById("cat2clue2").value,
-          question: document.getElementById("cat2question2").value,
-          value: document.getElementById("cat2price2").value,
-          isDailyDouble: document.getElementById("cat2daily2").checked
-        },
-        {
-          answer: document.getElementById("cat2clue3").value,
-          question: document.getElementById("cat2question3").value,
-          value: document.getElementById("cat2price3").value,
-          isDailyDouble: document.getElementById("cat2daily3").checked
-        },
-        {
-          answer: document.getElementById("cat2clue4").value,
-          question: document.getElementById("cat2question4").value,
-          value: document.getElementById("cat2price4").value,
-          isDailyDouble: document.getElementById("cat2daily4").checked
-        },
-        {
-          answer: document.getElementById("cat2clue5").value,
-          question: document.getElementById("cat2question5").value,
-          value: document.getElementById("cat2price5").value,
-          isDailyDouble: document.getElementById("cat2daily5").checked
-        },
-      ]
-    },
-    {
-      name: document.getElementById("cat3").value,
-      answers: [
-        {
-          answer: document.getElementById("cat3clue1").value,
-          question: document.getElementById("cat3question1").value,
-          value: document.getElementById("cat3price1").value,
-          isDailyDouble: document.getElementById("cat3daily1").checked
-        },
-        {
-          answer: document.getElementById("cat3clue2").value,
-          question: document.getElementById("cat3question2").value,
-          value: document.getElementById("cat3price2").value,
-          isDailyDouble: document.getElementById("cat3daily2").checked
-        },
-        {
-          answer: document.getElementById("cat3clue3").value,
-          question: document.getElementById("cat3question3").value,
-          value: document.getElementById("cat3price3").value,
-          isDailyDouble: document.getElementById("cat3daily3").checked
-        },
-        {
-          answer: document.getElementById("cat3clue4").value,
-          question: document.getElementById("cat3question4").value,
-          value: document.getElementById("cat3price4").value,
-          isDailyDouble: document.getElementById("cat3daily4").checked
-        },
-        {
-          answer: document.getElementById("cat3clue5").value,
-          question: document.getElementById("cat3question5").value,
-          value: document.getElementById("cat3price5").value,
-          isDailyDouble: document.getElementById("cat3daily5").checked
-        },
-      ]
-    },
-    {
-      name: document.getElementById("cat4").value,
-      answers: [
-        {
-          answer: document.getElementById("cat4clue1").value,
-          question: document.getElementById("cat4question1").value,
-          value: document.getElementById("cat4price1").value,
-          isDailyDouble: document.getElementById("cat4daily1").checked
-        },
-        {
-          answer: document.getElementById("cat4clue2").value,
-          question: document.getElementById("cat4question2").value,
-          value: document.getElementById("cat4price2").value,
-          isDailyDouble: document.getElementById("cat4daily2").checked
-        },
-        {
-          answer: document.getElementById("cat4clue3").value,
-          question: document.getElementById("cat4question3").value,
-          value: document.getElementById("cat4price3").value,
-          isDailyDouble: document.getElementById("cat4daily3").checked
-        },
-        {
-          answer: document.getElementById("cat4clue4").value,
-          question: document.getElementById("cat4question4").value,
-          value: document.getElementById("cat4price4").value,
-          isDailyDouble: document.getElementById("cat4daily4").checked
-        },
-        {
-          answer: document.getElementById("cat4clue5").value,
-          question: document.getElementById("cat4question5").value,
-          value: document.getElementById("cat4price5").value,
-          isDailyDouble: document.getElementById("cat4daily5").checked
-        },
-      ]
-    },
-    {
-      name: document.getElementById("cat5").value,
-      answers: [
-        {
-          answer: document.getElementById("cat5clue1").value,
-          question: document.getElementById("cat5question1").value,
-          value: document.getElementById("cat5price1").value,
-          isDailyDouble: document.getElementById("cat5daily1").checked
-        },
-        {
-          answer: document.getElementById("cat5clue2").value,
-          question: document.getElementById("cat5question2").value,
-          value: document.getElementById("cat5price2").value,
-          isDailyDouble: document.getElementById("cat5daily2").checked
-        },
-        {
-          answer: document.getElementById("cat5clue3").value,
-          question: document.getElementById("cat5question3").value,
-          value: document.getElementById("cat5price3").value,
-          isDailyDouble: document.getElementById("cat5daily3").checked
-        },
-        {
-          answer: document.getElementById("cat5clue4").value,
-          question: document.getElementById("cat5question4").value,
-          value: document.getElementById("cat5price4").value,
-          isDailyDouble: document.getElementById("cat5daily4").checked
-        },
-        {
-          answer: document.getElementById("cat5clue5").value,
-          question: document.getElementById("cat5question5").value,
-          value: document.getElementById("cat5price5").value,
-          isDailyDouble: document.getElementById("cat5daily5").checked
-        },
-      ]
-    },
-    {
-      name: document.getElementById("cat6").value,
-      answers: [
-        {
-          answer: document.getElementById("cat6clue1").value,
-          question: document.getElementById("cat6question1").value,
-          value: document.getElementById("cat6price1").value,
-          isDailyDouble: document.getElementById("cat6daily1").checked
-        },
-        {
-          answer: document.getElementById("cat6clue2").value,
-          question: document.getElementById("cat6question2").value,
-          value: document.getElementById("cat6price2").value,
-          isDailyDouble: document.getElementById("cat6daily2").checked
-        },
-        {
-          answer: document.getElementById("cat6clue3").value,
-          question: document.getElementById("cat6question3").value,
-          value: document.getElementById("cat6price3").value,
-          isDailyDouble: document.getElementById("cat6daily3").checked
-        },
-        {
-          answer: document.getElementById("cat6clue4").value,
-          question: document.getElementById("cat6question4").value,
-          value: document.getElementById("cat6price4").value,
-          isDailyDouble: document.getElementById("cat6daily4").checked
-        },
-        {
-          answer: document.getElementById("cat6clue5").value,
-          question: document.getElementById("cat6question5").value,
-          value: document.getElementById("cat6price5").value,
-          isDailyDouble: document.getElementById("cat6daily5").checked
-        },
-      ]
-    },
-  ];
+    let data = [];
+    for(let i = 0; i < 6; i++) {
+      let cat = "cat" + i;
+      let answers = [];
+      for(let j = 0; j < 5; j++) {
+        answers.push({
+          answer: document.getElementById(cat + "clue" + j).value,
+          question: document.getElementById(cat + "question" + j).value,
+          value: document.getElementById(cat + "price" + j).value,
+          isDailyDouble: document.getElementById(cat + "daily" + j).checked,
+        });
+      }
 
-  if (name) {
-    download(JSON.stringify(data), name + ".jsonpardy", "text/plain");
-  } else {
-    alert("Please enter a name!");
-  }
-});
+      let category = {
+        name: document.getElementById(cat).value,
+        answers: answers
+      };
+      data.push(category);
+    }
+
+    if (name) {
+      download(JSON.stringify(data), name + ".jsonpardy", "text/plain");
+    } else {
+      alert("Please enter a name!");
+    }
+  });
+}
 
 function download(content, fileName, contentType) {
   let a = document.createElement("a");
@@ -312,7 +170,15 @@ function onAnswerClick(answer, answerItem) {
 };
 
 function addAnimation(element, animation) {
-  element.classList.add(animation);
+  addClass(element, animation);
+}
+
+function addAttribute(element, attribute, value) {
+  element.setAttribute(attribute, value);
+}
+
+function addClass(element, className) {
+  element.classList.add(className);
 }
 
 function onRemoveAnimation(element, animation) {
@@ -342,7 +208,7 @@ dailyDouble.addEventListener("click", () => {
 });
 
 function hide(element) {
-  element.classList.add("hidden");
+  addClass(element, "hidden");
 }
 
 function show(element) {
