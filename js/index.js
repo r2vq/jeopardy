@@ -1,23 +1,168 @@
 let board = document.getElementById("board");
 let clue = document.getElementById("clue");
 let createForm = document.getElementById("createForm");
+let createGameButton = document.getElementById("createGame");
 let dailyDouble = document.getElementById("dailyDouble");
 let question = document.getElementById("question");
 let splash = document.getElementById("splash");
 let form = document.getElementById("create");
 
-createFormQuestions();
+// Event Listeners
+function onAnswerClick(answer, answerItem) {
+  let showClue = event => {
+    answer.removeEventListener("click", showClue);
+    answer.addEventListener("click", hideClue);
+
+    clue.innerHTML = answerItem.answer;
+    question.innerHTML = answerItem.question;
+
+    if (answerItem.isDailyDouble) {
+      transition(board, dailyDouble)();
+      addClass(dailyDouble, "rotate");
+    } else {
+      transition(board, clue)();
+      addClass(clue, "grow");
+    }
+    addClass(answer, "answered");
+    removeClass(answer, "answer");
+    removeClass(answer, "dollar");
+  };
+  let hideClue = event => {
+    answer.removeEventListener("click", hideClue);
+    answer.addEventListener("click", showClue);
+    removeClass(answer, "answered");
+    addClass(answer, "answer");
+    addClass(answer, "dollar");
+  }
+  return showClue;
+}
+
+function onRemoveAnimation(element, animation) {
+  return event => removeClass(element, animation);
+}
+
+function transition(from, to) {
+  return () => {
+    hide(from);
+    show(to);
+  };
+}
+
+function onFileUploaded(e) {
+  let file = e.target.files[0];
+  if (file && file.name) {
+    file.text().then(result => {
+      let data = JSON.parse(result);
+      playGame(data);
+    })
+  }
+}
+
+function onCreateGameButtonClick() {
+  createFormQuestions();
+  transition(splash, createForm)();
+}
+
+function onDownloadClick(e) {
+  e.preventDefault();
+  let name = document.getElementById("gameName").value;
+
+  let data = [];
+  for (let i = 0; i < 6; i++) {
+    let cat = "cat" + i;
+    let answers = [];
+    for (let j = 0; j < 5; j++) {
+      answers.push({
+        answer: document.getElementById(cat + "clue" + j).value,
+        question: document.getElementById(cat + "question" + j).value,
+        value: document.getElementById(cat + "price" + j).value,
+        isDailyDouble: document.getElementById(cat + "daily" + j).checked,
+      });
+    }
+
+    let category = {
+      name: document.getElementById(cat).value,
+      answers: answers
+    };
+    data.push(category);
+  }
+
+  if (name) {
+    download(JSON.stringify(data), name + ".jsonpardy", "text/plain");
+  } else {
+    alert("Please enter a name!");
+  }
+}
+
+// Element Helpers
+function hide(element) {
+  addClass(element, "hidden");
+}
+
+function show(element) {
+  removeClass(element, "hidden");
+}
+
+function addAttribute(element, attribute) {
+  element.setAttribute(attribute.name, attribute.value);
+}
+
+function addClass(element, className) {
+  element.classList.add(className);
+}
+
+function removeClass(element, className) {
+  element.classList.remove(className);
+}
+
+// Create Elements
+function createElement(name, attributes, classes) {
+  let element = document.createElement(name);
+  if (attributes) {
+    attributes.forEach(attribute => {
+      addAttribute(element, attribute);
+    });
+  }
+  if (classes) {
+    classes.forEach(className => {
+      addClass(element, className)
+    });
+  }
+  return element;
+}
+
+function createInput(inputId, inputType, inputClass, labelText, labelClass, parent) {
+  let inputLabel = createElement(
+    "label",
+    [attr("for", inputId)],
+    [labelClass]
+  );
+  inputLabel.innerHTML = labelText;
+  parent.appendChild(inputLabel);
+  let input = createElement(
+    "input",
+    [attr("type", inputType)],
+    inputClass ? [inputClass] : []
+  );
+  input.id = inputId;
+  parent.appendChild(input);
+}
+
+function attr(name, value) {
+  return {
+    name: name,
+    value: value
+  };
+}
 
 function createFormQuestions() {
-  let formQuestions = document.createElement("div");
-  addClass(formQuestions, "formQuestions");
+  let formQuestions = createElement("div", [], ["formQuestions"]);
   form.appendChild(formQuestions);
 
   for (let i = 0; i < 6; i++) {
     let cat = "cat" + i;
 
-    let catDiv = document.createElement("div");
-    addClass(catDiv, "formSection");
+    let catDiv = createElement("div", [], ["formSection"]);
     formQuestions.appendChild(catDiv);
 
     createInput(cat, "text", null, "Category " + (i + 1), "categoryLabel", catDiv);
@@ -29,80 +174,16 @@ function createFormQuestions() {
     }
   }
 
-  let gameNameSection = document.createElement("div");
-  addClass(gameNameSection, "gameNameSection");
+  let gameNameSection = createElement("div", [], ["gameNameSection"]);
   form.appendChild(gameNameSection);
   createInput("gameName", "text", "gameNameInput", "File Name", "gameNameLabel", gameNameSection);
 
   createInput("download", "submit", null, "Download Game", "download", form);
-  setDownloadClickListener();
 }
 
-function createInput(inputId, inputType, inputClass, labelText, labelClass, parent) {
-  let inputLabel = document.createElement("label");
-  addAttribute(inputLabel, "for", inputId);
-  addClass(inputLabel, labelClass);
-  inputLabel.innerHTML = labelText;
-  parent.appendChild(inputLabel);
-  let input = document.createElement("input");
-  input.id = inputId;
-  addAttribute(input, "type", inputType);
-  if (inputClass) {
-    addClass(input, inputClass);
-  }
-  parent.appendChild(input);
-}
-
-splash.addEventListener("change", e => {
-  let file = e.target.files[0];
-  if (file && file.name) {
-    file.text().then(result => {
-      let data = JSON.parse(result);
-      playGame(data);
-    })
-  }
-})
-
-document.getElementById("createGame").addEventListener("click", e => {
-  hide(splash);
-  show(createForm);
-});
-
-function setDownloadClickListener() {
-  document.getElementById("download").addEventListener("click", e => {
-    e.preventDefault();
-    let name = document.getElementById("gameName").value;
-
-    let data = [];
-    for(let i = 0; i < 6; i++) {
-      let cat = "cat" + i;
-      let answers = [];
-      for(let j = 0; j < 5; j++) {
-        answers.push({
-          answer: document.getElementById(cat + "clue" + j).value,
-          question: document.getElementById(cat + "question" + j).value,
-          value: document.getElementById(cat + "price" + j).value,
-          isDailyDouble: document.getElementById(cat + "daily" + j).checked,
-        });
-      }
-
-      let category = {
-        name: document.getElementById(cat).value,
-        answers: answers
-      };
-      data.push(category);
-    }
-
-    if (name) {
-      download(JSON.stringify(data), name + ".jsonpardy", "text/plain");
-    } else {
-      alert("Please enter a name!");
-    }
-  });
-}
-
+// User Actions
 function download(content, fileName, contentType) {
-  let a = document.createElement("a");
+  let a = createElement("a");
   let file = new Blob([content], {
     type: contentType
   });
@@ -113,20 +194,14 @@ function download(content, fileName, contentType) {
 
 function playGame(data) {
   data.forEach((categoryItem) => {
-    let column = document.createElement("div");
-    column.classList.add("column");
+    let column = createElement("div", [], ["column"]);
 
-    let category = document.createElement("div");
-    category.classList.add("category");
-    category.classList.add("tile");
+    let category = createElement("div", [], ["category", "tile"]);
     category.innerHTML = categoryItem.name;
     column.appendChild(category);
 
     categoryItem.answers.forEach((answerItem) => {
-      let answer = document.createElement("div");
-      answer.classList.add("tile");
-      answer.classList.add("answer");
-      answer.classList.add("dollar");
+      let answer = createElement("div", [], ["tile", "answer", "dollar"]);
       answer.innerHTML = answerItem.value;
 
       answer.addEventListener("click", onAnswerClick(answer, answerItem));
@@ -134,83 +209,27 @@ function playGame(data) {
     });
     board.appendChild(column);
   });
-  hide(splash);
-  show(board);
+  transition(splash, board)();
 }
 
-function onAnswerClick(answer, answerItem) {
-  let showClue = function(event) {
-    answer.removeEventListener("click", showClue);
-    answer.addEventListener("click", hideClue);
-
-    clue.innerHTML = answerItem.answer;
-    question.innerHTML = answerItem.question;
-
-    hide(board);
-
-    if (answerItem.isDailyDouble) {
-      show(dailyDouble);
-      addAnimation(dailyDouble, "rotate");
-    } else {
-      show(clue);
-      addAnimation(clue, "grow");
-    }
-    answer.classList.add("answered");
-    answer.classList.remove("answer");
-    answer.classList.remove("dollar");
-  };
-  let hideClue = function(event) {
-    answer.removeEventListener("click", hideClue);
-    answer.addEventListener("click", showClue);
-    answer.classList.remove("answered");
-    answer.classList.add("answer");
-    answer.classList.add("dollar");
-  }
-  return showClue;
-};
-
-function addAnimation(element, animation) {
-  addClass(element, animation);
-}
-
-function addAttribute(element, attribute, value) {
-  element.setAttribute(attribute, value);
-}
-
-function addClass(element, className) {
-  element.classList.add(className);
-}
-
-function onRemoveAnimation(element, animation) {
-  return function(event) {
-    element.classList.remove(animation);
-  }
-}
-
-clue.addEventListener("click", () => {
-  show(question);
-  hide(clue);
-});
-
-question.addEventListener("click", () => {
-  show(board);
-  hide(question);
-});
-
+// Event Listeners
+clue.addEventListener("click", transition(clue, question));
 clue.addEventListener("webkitTransitionEnd", onRemoveAnimation(clue, "grow"));
 clue.addEventListener("transitionEnd", onRemoveAnimation(clue, "grow"));
+
+question.addEventListener("click", transition(question, board));
+
 dailyDouble.addEventListener("webkitTransitionEnd", onRemoveAnimation(dailyDouble, "rotate"));
 dailyDouble.addEventListener("transitionEnd", onRemoveAnimation(dailyDouble, "rotate"));
+dailyDouble.addEventListener("click", transition(dailyDouble, clue));
 
-dailyDouble.addEventListener("click", () => {
-  hide(dailyDouble);
-  show(clue);
+createGameButton.addEventListener("click", onCreateGameButtonClick);
+
+splash.addEventListener("change", onFileUploaded);
+
+document.addEventListener("click", e => {
+  let element = e.target;
+  if (element.id == "download") {
+    onDownloadClick();
+  }
 });
-
-function hide(element) {
-  addClass(element, "hidden");
-}
-
-function show(element) {
-  element.classList.remove("hidden");
-}
