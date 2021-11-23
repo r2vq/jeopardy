@@ -2,6 +2,7 @@
   from {
     transform: scale(0.5);
   }
+
   to {
     transform: scale(1);
   }
@@ -11,6 +12,7 @@
   from {
     transform: scale(0.1) rotateX(0deg);
   }
+
   to {
     transform: scale(1) rotateX(360deg);
   }
@@ -219,6 +221,7 @@ input[type="button"] {
 }
 
 .createForm {
+  align-items: center;
   display: flex;
   flex-direction: column;
 }
@@ -232,6 +235,14 @@ input[type="button"] {
   font-size: 20px;
   padding: 12px 12px;
   text-align: center;
+}
+
+.scoreButton {
+  background: #000099;
+  color: #ffffff;
+  height: 5vh;
+  margin: 20px;
+  width: 50vw;
 }
 
 .tile {

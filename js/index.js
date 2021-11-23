@@ -6,6 +6,8 @@ let dailyDouble = document.getElementById("dailyDouble");
 let question = document.getElementById("question");
 let splash = document.getElementById("splash");
 let form = document.getElementById("create");
+let categoryCount = 6;
+let clueCount = 5;
 
 // Event Listeners
 function onAnswerClick(answer, answerItem) {
@@ -68,10 +70,10 @@ function onDownloadClick(e) {
   let name = document.getElementById("gameName").value;
 
   let data = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < categoryCount; i++) {
     let cat = "cat" + i;
     let answers = [];
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < clueCount; j++) {
       answers.push({
         answer: document.getElementById(cat + "clue" + j).value,
         question: document.getElementById(cat + "question" + j).value,
@@ -156,17 +158,27 @@ function attr(name, value) {
 }
 
 function createFormQuestions() {
+  let jeopardyButton = createElement("button", [], ["scoreButton"]);
+  jeopardyButton.id = "jeopardyButton";
+  jeopardyButton.innerHTML = "Populate Regular Jeopardy Scores";
+  form.appendChild(jeopardyButton);
+
+  let doubleJeopardyButton = createElement("button", [], ["scoreButton"]);
+  doubleJeopardyButton.id = "doubleJeopardyButton";
+  doubleJeopardyButton.innerHTML = "Populate DOUBLE Jeopardy Scores"
+  form.appendChild(doubleJeopardyButton);
+
   let formQuestions = createElement("div", [], ["formQuestions"]);
   form.appendChild(formQuestions);
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < categoryCount; i++) {
     let cat = "cat" + i;
 
     let catDiv = createElement("div", [], ["formSection"]);
     formQuestions.appendChild(catDiv);
 
     createInput(cat, "text", null, "Category " + (i + 1), "categoryLabel", catDiv);
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < clueCount; j++) {
       createInput(cat + "clue" + j, "text", "clueInput", "Clue " + (j + 1), "clueLabel", catDiv);
       createInput(cat + "question" + j, "text", "questionInput", "Expected Response", "questionLabel", catDiv);
       createInput(cat + "price" + j, "text", "priceInput", "Price", "priceLabel", catDiv);
@@ -212,6 +224,15 @@ function playGame(data) {
   transition(splash, board)();
 }
 
+function populateScores(isDouble) {
+  for (let i = 0; i < categoryCount; i++) {
+    for (let j = 0; j < clueCount; j++) {
+      let price = (j + 1) * 100 * (isDouble ? 2 : 1);
+      document.getElementById("cat" + i + "price" + j).value = price;
+    }
+  }
+}
+
 // Event Listeners
 clue.addEventListener("click", transition(clue, question));
 clue.addEventListener("webkitTransitionEnd", onRemoveAnimation(clue, "grow"));
@@ -229,6 +250,19 @@ splash.addEventListener("change", onFileUploaded);
 
 document.addEventListener("click", e => {
   let element = e.target;
+  switch (element.id) {
+    case "download":
+      onDownloadClick();
+      break;
+    case "jeopardyButton":
+      e.preventDefault();
+      populateScores(false);
+      break;
+    case "doubleJeopardyButton":
+      e.preventDefault();
+      populateScores(true);
+      break;
+  }
   if (element.id == "download") {
     onDownloadClick();
   }
