@@ -158,6 +158,11 @@ function attr(name, value) {
 }
 
 function createFormQuestions() {
+  let oldJeopardyButton = createElement("button", [], ["scoreButton"]);
+  oldJeopardyButton.id = "oldJeopardyButton";
+  oldJeopardyButton.innerHTML = "Populate Old Jeopardy Scores";
+  form.appendChild(oldJeopardyButton);
+
   let jeopardyButton = createElement("button", [], ["scoreButton"]);
   jeopardyButton.id = "jeopardyButton";
   jeopardyButton.innerHTML = "Populate Regular Jeopardy Scores";
@@ -224,10 +229,10 @@ function playGame(data) {
   transition(splash, board)();
 }
 
-function populateScores(isDouble) {
+function populateScores(base) {
   for (let i = 0; i < categoryCount; i++) {
     for (let j = 0; j < clueCount; j++) {
-      let price = (j + 1) * 100 * (isDouble ? 2 : 1);
+      let price = (j + 1) * base;
       document.getElementById("cat" + i + "price" + j).value = price;
     }
   }
@@ -254,13 +259,17 @@ document.addEventListener("click", e => {
     case "download":
       onDownloadClick();
       break;
+    case "oldJeopardyButton":
+      e.preventDefault();
+      populateScores(100);
+      break;
     case "jeopardyButton":
       e.preventDefault();
-      populateScores(false);
+      populateScores(200);
       break;
     case "doubleJeopardyButton":
       e.preventDefault();
-      populateScores(true);
+      populateScores(400);
       break;
   }
   if (element.id == "download") {
