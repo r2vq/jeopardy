@@ -20,7 +20,9 @@ function onAnswerClick(answer, answerItem) {
     question.innerHTML = answerItem.question;
 
     if (answerItem.isDailyDouble) {
-      new Audio("snd/daily-double.mp3").play();
+      let sound = new Audio("snd/daily-double.mp3");
+      sound.volume = 0.25;
+      sound.play();
       transition(board, dailyDouble)();
       addClass(dailyDouble, "rotate");
     } else {
