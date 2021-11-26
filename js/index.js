@@ -210,23 +210,48 @@ function download(content, fileName, contentType) {
 }
 
 function playGame(data) {
-  data.forEach((categoryItem) => {
+  let categories = data.map((categoryItem) => {
     let column = createElement("div", [], ["column"]);
 
     let category = createElement("div", [], ["category", "tile"]);
     category.innerHTML = categoryItem.name;
     column.appendChild(category);
 
-    categoryItem.answers.forEach((answerItem) => {
-      let answer = createElement("div", [], ["tile", "answer", "dollar"]);
+    let tiles = categoryItem.answers.map((answerItem) => {
+      let answer = createElement("div", [], ["tile", "answered"]);
       answer.innerHTML = answerItem.value;
 
       answer.addEventListener("click", onAnswerClick(answer, answerItem));
       column.appendChild(answer);
+      return answer;
     });
+
     board.appendChild(column);
+
+    return tiles;
   });
+
+  shuffle(categories.flatMap(e => e))
+    .forEach((tile, i) => {
+      setTimeout(() => {
+        removeClass(tile, "answered");
+        addClass(tile, "answer");
+        addClass(tile, "dollar");
+      }, 75 * i);
+    });
+
   transition(splash, board)();
+}
+
+function shuffle(array) {
+  let output = [...array];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = output[i];
+    output[i] = output[j];
+    output[j] = temp;
+  }
+  return output;
 }
 
 function populateScores(base) {
