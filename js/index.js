@@ -20,6 +20,7 @@ function onAnswerClick(answer, answerItem) {
     question.innerHTML = answerItem.question;
 
     if (answerItem.isDailyDouble) {
+      new Audio("snd/daily-double.mp3").play();
       transition(board, dailyDouble)();
       addClass(dailyDouble, "rotate");
     } else {
@@ -242,6 +243,7 @@ function playGame(data) {
       }, animationTime * i);
     });
 
+  new Audio("snd/board-fill.mp3").play();
   categories.forEach((tile, i) => {
     setTimeout(() => {
       removeClass(tile, "answered");
