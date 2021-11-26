@@ -8,6 +8,7 @@ let splash = document.getElementById("splash");
 let form = document.getElementById("create");
 let categoryCount = 6;
 let clueCount = 5;
+let animationTime = 75;
 
 // Event Listeners
 function onAnswerClick(answer, answerItem) {
@@ -210,35 +211,43 @@ function download(content, fileName, contentType) {
 }
 
 function playGame(data) {
-  let categories = data.map((categoryItem) => {
+  let categories = [];
+  let clues = [];
+  data.forEach((categoryItem) => {
     let column = createElement("div", [], ["column"]);
 
-    let category = createElement("div", [], ["category", "tile"]);
+    let category = createElement("div", [], ["tile", "answered"]);
     category.innerHTML = categoryItem.name;
     column.appendChild(category);
+    categories.push(category);
 
-    let tiles = categoryItem.answers.map((answerItem) => {
+    categoryItem.answers.forEach((answerItem) => {
       let answer = createElement("div", [], ["tile", "answered"]);
       answer.innerHTML = answerItem.value;
 
       answer.addEventListener("click", onAnswerClick(answer, answerItem));
       column.appendChild(answer);
-      return answer;
+      clues.push(answer);
     });
 
     board.appendChild(column);
-
-    return tiles;
   });
 
-  shuffle(categories.flatMap(e => e))
+  shuffle(clues.flatMap(e => e))
     .forEach((tile, i) => {
       setTimeout(() => {
         removeClass(tile, "answered");
         addClass(tile, "answer");
         addClass(tile, "dollar");
-      }, 75 * i);
+      }, animationTime * i);
     });
+
+  categories.forEach((tile, i) => {
+    setTimeout(() => {
+      removeClass(tile, "answered");
+      addClass(tile, "category");
+    }, animationTime * clues.length + animationTime * 10 * (i + 1));
+  });
 
   transition(splash, board)();
 }
