@@ -1,7 +1,7 @@
 let config = {
   categoryCount: 6,
   clueCount: 5,
-  animationTime: 75,
+  animationTime: 85,
   version: "v0.5.1"
 };
 
