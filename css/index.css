@@ -8,6 +8,16 @@
   }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes rotateAndGrow {
   from {
     transform: scale(0.1) rotateX(0deg);
@@ -38,6 +48,10 @@ input[type="button"] {
 }
 
 #board {
+  background-image: url("../img/globe.jpeg") !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   border: 10px solid black;
   box-sizing: border-box;
   display: grid;
@@ -116,6 +130,7 @@ input[type="button"] {
 
 .answer {
   align-items: center;
+  background-color: #000099;
   color: #ffcc22;
   cursor: pointer;
   font-family: sans-serif;
@@ -126,6 +141,7 @@ input[type="button"] {
 
 .answered {
   align-items: center;
+  background: #000099;
   color: #ffcc22;
   cursor: pointer;
   font-family: sans-serif;
@@ -136,6 +152,7 @@ input[type="button"] {
 
 .category {
   align-items: center;
+  background-color: #000099;
   color: #ffffff;
   font-family: sans-serif;
   font-size: 3.5vmin;
@@ -192,6 +209,31 @@ input[type="button"] {
   text-align: center;
 }
 
+.loadingTile {
+  background: #00000000;
+  font-size: 0px;
+}
+
+.fadeOut {
+  animation: fadeOut 200ms;
+}
+
+.loadingCategory {
+  position: relative;
+}
+
+.loadingCategory>.cover {
+  background-image: url("../img/globe.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
 .subheader {
   font-family: monospace;
   font-size: 2.5vmin;
@@ -245,7 +287,6 @@ input[type="button"] {
 }
 
 .tile {
-  background: #000099;
   border: 5px solid black;
   display: flex;
   flex: 1;

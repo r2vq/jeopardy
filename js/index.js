@@ -229,15 +229,22 @@ function playGame(data) {
   data.forEach((categoryItem, column) => {
     let category = board.addChild("div")
       .addClass("tile")
-      .addClass("answered")
+      .addClass("category")
+      .addClass("loadingCategory")
       .setText(categoryItem.name)
       .setStyle("gridColumn", column + 1)
       .setStyle("gridRow", 1);
+
+    let categoryCover = category.addChild("div")
+      .addClass("cover")
+      .on("animationend", () => category.removeClass("loadingCategory"))
+      .on("webkitAnimationEnd", () => category.removeClass("loadingCategory"));
+
     categories.push(category);
     categoryItem.answers.forEach((answerItem, row) => {
       let answer = board.addChild("div")
         .addClass("tile")
-        .addClass("answered")
+        .addClass("loadingTile")
         .setText(answerItem.value)
         .setOnAnswerClick(answerItem)
         .setStyle("gridColumn", column + 1)
@@ -250,24 +257,25 @@ function playGame(data) {
   board.setStyle("gridTemplateColumns", `repeat(${data.length}, 1fr)`)
     .setStyle("gridTemplateRows", `repeat(${maxRows + 1}, 1fr)`);
 
-  clues.flatMap(e => e)
-    .shuffle()
-    .forEach((tile, i) => {
+  setTimeout(() => {
+    clues.flatMap(e => e)
+      .shuffle()
+      .forEach((tile, i) => {
+        setTimeout(() => {
+          tile.removeClass("loadingTile")
+            .addClass("answer")
+            .addClass("dollar");
+        }, config.animationTime * i);
+      });
+
+    playAudio("snd/board-fill.mp3");
+    categories.forEach((tile, i) => {
       setTimeout(() => {
-        tile.removeClass("answered")
-          .addClass("answer")
-          .addClass("dollar");
-      }, config.animationTime * i);
+        tile.querySelector(".cover")
+          .addClass("fadeOut");
+      }, config.animationTime * clues.length + config.animationTime * 10 * (i + 1));
     });
-
-  playAudio("snd/board-fill.mp3");
-  categories.forEach((tile, i) => {
-    setTimeout(() => {
-      tile.removeClass("answered")
-        .addClass("category");
-    }, config.animationTime * clues.length + config.animationTime * 10 * (i + 1));
-  });
-
+  }, config.animationTime * 5);
   transition(splash, board);
 }
 
