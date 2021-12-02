@@ -2,7 +2,7 @@ let config = {
   categoryCount: 6,
   clueCount: 5,
   animationTime: 85,
-  version: "v0.5.2"
+  version: "v0.5.3"
 };
 
 let board = document.getElementById("board");
