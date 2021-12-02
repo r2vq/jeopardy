@@ -84,6 +84,11 @@ HTMLElement.prototype.setProperty = function(name, value) {
   return this;
 };
 
+HTMLElement.prototype.setStyle = function(jsName, value) {
+  this.style[jsName] = value;
+  return this;
+};
+
 HTMLElement.prototype.setText = function(text) {
   this.innerText = text;
   return this;
@@ -220,26 +225,30 @@ function playGame(data) {
 
   let categories = [];
   let clues = [];
-  data.forEach((categoryItem) => {
-    let column = board.addChild("div")
-      .addClass("column");
-
-    let category = column.addChild("div")
+  let maxRows = 0;
+  data.forEach((categoryItem, column) => {
+    let category = board.addChild("div")
       .addClass("tile")
       .addClass("answered")
-      .setText(categoryItem.name);
+      .setText(categoryItem.name)
+      .setStyle("gridColumn", column + 1)
+      .setStyle("gridRow", 1);
     categories.push(category);
-
-    categoryItem.answers.forEach((answerItem) => {
-      let answer = column.addChild("div")
+    categoryItem.answers.forEach((answerItem, row) => {
+      let answer = board.addChild("div")
         .addClass("tile")
         .addClass("answered")
         .setText(answerItem.value)
-        .setOnAnswerClick(answerItem);
+        .setOnAnswerClick(answerItem)
+        .setStyle("gridColumn", column + 1)
+        .setStyle("gridRow", row + 2);
       clues.push(answer);
     });
-
+    maxRows = Math.max(maxRows, categoryItem.answers.length);
   });
+
+  board.setStyle("gridTemplateColumns", `repeat(${data.length}, 1fr)`)
+    .setStyle("gridTemplateRows", `repeat(${maxRows + 1}, 1fr)`);
 
   clues.flatMap(e => e)
     .shuffle()
